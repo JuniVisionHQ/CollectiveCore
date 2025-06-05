@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectiveCore.Api", "CollectiveCore.Api\CollectiveCore.Api.csproj", "{2904EFFE-1454-4309-ACE9-C98E49C59A97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectiveCore.Models", "CollectiveCore.Models\CollectiveCore.Models.csproj", "{729A242C-2EE5-4E39-99D8-BBABF5C6592F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2904EFFE-1454-4309-ACE9-C98E49C59A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2904EFFE-1454-4309-ACE9-C98E49C59A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2904EFFE-1454-4309-ACE9-C98E49C59A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2904EFFE-1454-4309-ACE9-C98E49C59A97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{729A242C-2EE5-4E39-99D8-BBABF5C6592F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{729A242C-2EE5-4E39-99D8-BBABF5C6592F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{729A242C-2EE5-4E39-99D8-BBABF5C6592F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{729A242C-2EE5-4E39-99D8-BBABF5C6592F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BED33663-672B-49A3-9743-1291D3E01EA9}
+	EndGlobalSection
+EndGlobal

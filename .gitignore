@@ -1,0 +1,56 @@
+# Build output folders
+bin/
+obj/
+
+# Visual Studio user-specific files
+*.user
+*.suo
+*.vs/
+*.vscode/
+
+# Visual Studio solution options
+*.sln.docstates
+
+# NuGet packages folder (can be restored via restore command)
+packages/
+
+# Rider project files
+*.sln.iml
+.idea/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Entity Framework Migrations (keep these tracked, so no ignore!)
+
+# Database files
+*.mdf
+*.ldf
+
+# Publish output folder (optional, ignore if you publish locally)
+publish/
+
+# Test result files
+TestResults/
+*.trx
+
+# Dotnet tool cache
+.dotnet/
+
+# Resharper files
+_ReSharper*/
+*.DotSettings.user
+
+# Backup and temp files
+*~
+*.bak
+*.tmp
+
+# Mac OS files (if you work on macOS)
+.DS_Store
+
+# Windows thumbnail cache files
+Thumbs.db
