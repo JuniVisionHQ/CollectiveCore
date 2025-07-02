@@ -1,4 +1,5 @@
-﻿using CollectiveCore.Api.Repositories;
+﻿using CollectiveCore.Api.DTOs;
+using CollectiveCore.Api.Repositories;
 using CollectiveCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -18,11 +19,24 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
         {
             try
             {
-                return Ok(await _bookRepository.GetBooks());
+                var books = await _bookRepository.GetBooks();  // Get entities
+
+                var bookDtos = books.Select(b => new BookDto     // Map entities to DTOs
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    Description = b.Description,
+                    Genre = b.Genre,
+                    YearPublished = b.YearPublished,
+                    BookCoverImageUrl = b.BookCoverImageUrl
+                });
+
+                return Ok(bookDtos);
             }
             catch (Exception)
             {
@@ -32,7 +46,7 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<ActionResult<BookDto>> GetBook(int id)
         {
             try
             {
@@ -40,8 +54,20 @@ namespace CollectiveCore.Api.Controllers
 
                 if (result == null) return NotFound();
 
-                return result;
-            }
+                var bookDto = new BookDto
+                {
+                    Id = result.Id,
+                    Title = result.Title,
+                    Author = result.Author,
+                    Description = result.Description,
+                    Genre = result.Genre,
+                    YearPublished = result.YearPublished,
+                    BookCoverImageUrl = result.BookCoverImageUrl
+                };
+
+                return Ok(bookDto);
+
+            } 
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
@@ -50,19 +76,46 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Book>> CreateBook(Book book)
+        public async Task<ActionResult<BookDto>> CreateBook(CreateBookDto newBookDto)
         {
             try
             {
-                if (book == null)
+                if (newBookDto == null)
                 {
                     return BadRequest();
-                }                
+                }
 
-                var createdBook = await _bookRepository.AddBook(book);
+                // Map DTO to Book entity
+                var book = new Book
+                {
+                    Title = newBookDto.Title,
+                    Author = newBookDto.Author,
+                    Description = newBookDto.Description,
+                    Genre = newBookDto.Genre,
+                    YearPublished = newBookDto.YearPublished,
+                    BookCoverImageUrl = newBookDto.BookCoverImageUrl
+                };
 
-                return CreatedAtAction(nameof(GetBook),
-                    new { id = createdBook.Id }, createdBook);
+                // Save to database using your repository
+                await _bookRepository.AddBook(book);
+
+
+                // Map the saved entity back to a BookDto (with the new Id)
+                var bookDto = new BookDto
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Author = book.Author,
+                    Description = book.Description,
+                    Genre = book.Genre,
+                    YearPublished = book.YearPublished,
+                    BookCoverImageUrl = book.BookCoverImageUrl
+                };
+
+                // Return created response with DTO
+                return CreatedAtAction(nameof(GetBook), new { id = book.Id }, bookDto);                
+
+              
             }
             catch (Exception)
             {
@@ -72,19 +125,44 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Book>> UpdateBook(int id, Book book)
+        public async Task<ActionResult<BookDto>> UpdateBook(int id, UpdateBookDto updatedBookDto)
         {
             try
             {
-                if (id != book.Id)
-                    return BadRequest("Book ID mismatch");
+                if (updatedBookDto == null)
+                    return BadRequest("Invalid book data.");
 
-                var bookToUpdate = await _bookRepository.GetBook(id);
+                var existingBook = await _bookRepository.GetBook(id);
 
-                if (bookToUpdate == null)
-                    return NotFound($"Book with Id = {id} not found");
+                if (existingBook == null)
+                    return NotFound($"Book with ID {id} not found.");
 
-                return await _bookRepository.UpdateBook(book);
+                // Update fields
+                existingBook.Title = updatedBookDto.Title;
+                existingBook.Author = updatedBookDto.Author;
+                existingBook.Description = updatedBookDto.Description;
+                existingBook.Genre = updatedBookDto.Genre;
+                existingBook.YearPublished = updatedBookDto.YearPublished;
+                existingBook.BookCoverImageUrl = updatedBookDto.BookCoverImageUrl;
+
+                // Actually save and update using the repository
+                var updatedBook = await _bookRepository.UpdateBook(existingBook);
+
+                // Convert to BookDto
+                var bookDto = new BookDto
+                {
+                    Id = updatedBook.Id,
+                    Title = updatedBook.Title,
+                    Author = updatedBook.Author,
+                    Description = updatedBook.Description,
+                    Genre = updatedBook.Genre,
+                    YearPublished = updatedBook.YearPublished,
+                    BookCoverImageUrl = updatedBook.BookCoverImageUrl
+                };
+
+                return Ok(bookDto);
+
+
             }
             catch (Exception)
             {

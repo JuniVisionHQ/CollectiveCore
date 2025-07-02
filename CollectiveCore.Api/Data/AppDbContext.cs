@@ -18,9 +18,19 @@ namespace CollectiveCore.Api.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-            // Define composite primary key for the join table
+            // Composite Key
             modelBuilder.Entity<UserBook>().HasKey(ub => new { ub.UserId, ub.BookId });
+
+            // Relationships
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.User)
+                .WithMany(u => u.UserBooks)
+                .HasForeignKey(ub => ub.UserId);
+
+            modelBuilder.Entity<UserBook>()
+                .HasOne(ub => ub.Book)
+                .WithMany(b => b.UserBooks)
+                .HasForeignKey(ub => ub.BookId);
 
             // Seed Users
             modelBuilder.Entity<User>().HasData(
@@ -36,9 +46,9 @@ namespace CollectiveCore.Api.Data
 
             // Seed UserBooks (many-to-many)
             modelBuilder.Entity<UserBook>().HasData(
-                new UserBook { UserId = 1, BookId = 1 },
-                new UserBook { UserId = 2, BookId = 2 }
-            );
+                new UserBook { UserId = 1, BookId = 1, IsFavorite = false, HasRead = false },
+                new UserBook { UserId = 2, BookId = 2, IsFavorite = false, HasRead = false }
+            );            
         }
     }
 }

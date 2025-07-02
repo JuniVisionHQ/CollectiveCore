@@ -15,7 +15,7 @@ namespace CollectiveCore.Models
 
         public string? BookCoverImageUrl { get; set; }  // Optional
 
-        public List<UserBook>? UserBooks { get; set; } = new();
+        public List<UserBook> UserBooks { get; set; } = new();
 
     }
 }
