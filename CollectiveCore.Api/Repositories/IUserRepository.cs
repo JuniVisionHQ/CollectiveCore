@@ -4,12 +4,12 @@ namespace CollectiveCore.Api.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetUsers();
-        Task<User> GetUser(int userId);
-        Task<User> AddUser(User user);
-        Task<User> UpdateUser(User user);
-        Task<User?> DeleteUser(int userId);
+        Task<IEnumerable<User>> GetUsersAsync();
+        Task<User> GetUserAsync(int userId);
+        Task<User> AddUserAsync(User user);
+        Task<User> UpdateUserAsync(User user);
+        Task<User?> DeleteUserAsync(int userId);
 
-        Task<User?> GetUserByEmail(string email);
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }

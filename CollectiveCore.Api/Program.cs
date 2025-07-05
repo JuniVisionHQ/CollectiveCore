@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add repository DI
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IUserBookRepository, UserBookRepository>();
 
 
 builder.Services.AddControllers();

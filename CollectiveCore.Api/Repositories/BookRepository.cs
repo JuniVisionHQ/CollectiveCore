@@ -13,23 +13,23 @@ namespace CollectiveCore.Api.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<Book>> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
             return await _appDbContext.Books.ToListAsync();
         }
-        public async Task<Book> GetBook(int bookId)
+        public async Task<Book> GetBookAsync(int bookId)
         {
             return await _appDbContext.Books
                 .FirstOrDefaultAsync(e => e.Id == bookId);
         }
 
-        public async Task<Book> AddBook(Book book)
+        public async Task<Book> AddBookAsync(Book book)
         {
             var result = await _appDbContext.Books.AddAsync(book);
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
-        public async Task<Book> UpdateBook(Book book)
+        public async Task<Book> UpdateBookAsync(Book book)
         {
             var result = await _appDbContext.Books
                 .FirstOrDefaultAsync(e => e.Id == book.Id);
@@ -50,7 +50,7 @@ namespace CollectiveCore.Api.Repositories
 
             return null;
         }
-        public async Task<Book?> DeleteBook(int bookId)
+        public async Task<Book?> DeleteBookAsync(int bookId)
         {
             var result = await _appDbContext.Books
                 .FirstOrDefaultAsync(e => e.Id == bookId);

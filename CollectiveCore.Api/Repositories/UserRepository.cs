@@ -13,29 +13,29 @@ namespace CollectiveCore.Api.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _appDbContext.Users.ToListAsync();
         }
-        public async Task<User> GetUser(int userId)
+        public async Task<User> GetUserAsync(int userId)
         {
             return await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Id == userId);
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Email == email);
         }
 
-        public async Task<User> AddUser(User user)
+        public async Task<User> AddUserAsync(User user)
         {
             var result = await _appDbContext.Users.AddAsync(user);
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
-        public async Task<User> UpdateUser(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
             var result = await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Id == user.Id);
@@ -52,7 +52,7 @@ namespace CollectiveCore.Api.Repositories
 
             return null;
         }
-        public async Task<User?> DeleteUser(int userId)
+        public async Task<User?> DeleteUserAsync(int userId)
         {
             var result = await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Id == userId);

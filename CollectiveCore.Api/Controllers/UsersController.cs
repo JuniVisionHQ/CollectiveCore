@@ -22,7 +22,7 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                return Ok(await _userRepository.GetUsers());
+                return Ok(await _userRepository.GetUsersAsync());
             }
             catch (Exception)
             {
@@ -36,7 +36,7 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                var result = await _userRepository.GetUser(id);
+                var result = await _userRepository.GetUserAsync(id);
 
                 if (result == null) return NotFound();
 
@@ -60,7 +60,7 @@ namespace CollectiveCore.Api.Controllers
                 }
 
                 // Add custom model validation error
-                var emp = _userRepository.GetUserByEmail(user.Email);
+                var emp = _userRepository.GetUserByEmailAsync(user.Email);
 
                 if (emp != null)
                 {
@@ -68,7 +68,7 @@ namespace CollectiveCore.Api.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var createdUser = await _userRepository.AddUser(user);
+                var createdUser = await _userRepository.AddUserAsync(user);
 
                 return CreatedAtAction(nameof(GetUser),
                     new { id = createdUser.Id }, createdUser);
@@ -88,12 +88,12 @@ namespace CollectiveCore.Api.Controllers
                 if (id != user.Id)
                     return BadRequest("User ID mismatch");
 
-                var userToUpdate = await _userRepository.GetUser(id);
+                var userToUpdate = await _userRepository.GetUserAsync(id);
 
                 if (userToUpdate == null)
                     return NotFound($"User with Id = {id} not found");
 
-                return await _userRepository.UpdateUser(user);
+                return await _userRepository.UpdateUserAsync(user);
             }
             catch (Exception)
             {
@@ -107,14 +107,14 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                var userToDelete = await _userRepository.GetUser(id);
+                var userToDelete = await _userRepository.GetUserAsync(id);
 
                 if (userToDelete == null)
                 {
                     return NotFound($"User with Id = {id} not found");
                 }
 
-                return await _userRepository.DeleteUser(id);
+                return await _userRepository.DeleteUserAsync(id);
             }
             catch (Exception)
             {

@@ -23,7 +23,7 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                var books = await _bookRepository.GetBooks();  // Get entities
+                var books = await _bookRepository.GetBooksAsync();  // Get entities
 
                 var bookDtos = books.Select(b => new BookDto     // Map entities to DTOs
                 {
@@ -50,7 +50,7 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                var result = await _bookRepository.GetBook(id);
+                var result = await _bookRepository.GetBookAsync(id);
 
                 if (result == null) return NotFound();
 
@@ -97,7 +97,7 @@ namespace CollectiveCore.Api.Controllers
                 };
 
                 // Save to database using your repository
-                await _bookRepository.AddBook(book);
+                await _bookRepository.AddBookAsync(book);
 
 
                 // Map the saved entity back to a BookDto (with the new Id)
@@ -132,7 +132,7 @@ namespace CollectiveCore.Api.Controllers
                 if (updatedBookDto == null)
                     return BadRequest("Invalid book data.");
 
-                var existingBook = await _bookRepository.GetBook(id);
+                var existingBook = await _bookRepository.GetBookAsync(id);
 
                 if (existingBook == null)
                     return NotFound($"Book with ID {id} not found.");
@@ -146,7 +146,7 @@ namespace CollectiveCore.Api.Controllers
                 existingBook.BookCoverImageUrl = updatedBookDto.BookCoverImageUrl;
 
                 // Actually save and update using the repository
-                var updatedBook = await _bookRepository.UpdateBook(existingBook);
+                var updatedBook = await _bookRepository.UpdateBookAsync(existingBook);
 
                 // Convert to BookDto
                 var bookDto = new BookDto
@@ -176,14 +176,14 @@ namespace CollectiveCore.Api.Controllers
         {
             try
             {
-                var bookToDelete = await _bookRepository.GetBook(id);
+                var bookToDelete = await _bookRepository.GetBookAsync(id);
 
                 if (bookToDelete == null)
                 {
                     return NotFound($"Book with Id = {id} not found");
                 }
 
-                return await _bookRepository.DeleteBook(id);
+                return await _bookRepository.DeleteBookAsync(id);
             }
             catch (Exception)
             {
