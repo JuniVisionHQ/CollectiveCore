@@ -1,4 +1,5 @@
-﻿using CollectiveCore.Api.Repositories;
+﻿using CollectiveCore.Api.DTOs;
+using CollectiveCore.Api.Repositories;
 using CollectiveCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -18,11 +19,20 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             try
             {
-                return Ok(await _userRepository.GetUsersAsync());
+                var users = await _userRepository.GetUsersAsync();
+
+                var userDtos = users.Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email
+                });
+
+                return Ok(userDtos);
             }
             catch (Exception)
             {
@@ -32,15 +42,20 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             try
             {
-                var result = await _userRepository.GetUserAsync(id);
+                var user = await _userRepository.GetUserAsync(id);
 
-                if (result == null) return NotFound();
+                if (user == null) return NotFound();
 
-                return result;
+                return Ok(new UserDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email
+                });
             }
             catch (Exception)
             {
@@ -50,28 +65,39 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser(User user)
+        public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto newUserDto)
         {
             try
             {
-                if (user == null)
-                {
-                    return BadRequest();
-                }
+                //this tests that fields are valid
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
                 // Add custom model validation error
-                var emp = _userRepository.GetUserByEmailAsync(user.Email);
+                var userWithSameEmail = await _userRepository.GetUserByEmailAsync(newUserDto.Email);
 
-                if (emp != null)
+                if (userWithSameEmail != null)
                 {
                     ModelState.AddModelError("email", "User email already in use");
                     return BadRequest(ModelState);
                 }
 
-                var createdUser = await _userRepository.AddUserAsync(user);
+                var newUser = new User
+                {
+                    UserName = newUserDto.UserName,
+                    Email = newUserDto.Email
+                };
 
-                return CreatedAtAction(nameof(GetUser),
-                    new { id = createdUser.Id }, createdUser);
+                var savedUser = await _userRepository.AddUserAsync(newUser);
+
+                var userToReturn = new UserDto
+                {
+                    Id = savedUser.Id,
+                    UserName = savedUser.UserName,
+                    Email = savedUser.Email
+                };
+
+                return CreatedAtAction(nameof(GetUser), new { id = userToReturn.Id }, userToReturn);
             }
             catch (Exception)
             {
@@ -81,29 +107,64 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<User>> UpdateUser(int id, User user)
+        public async Task<ActionResult<UserDto>> UpdateUser(int id, UpdateUserDto updateUserDto)
         {
             try
-            {
-                if (id != user.Id)
-                    return BadRequest("User ID mismatch");
+            {                
+                if (updateUserDto == null || id <= 0)
+                {
+                    return BadRequest("Invalid user update request.");
+                }
 
-                var userToUpdate = await _userRepository.GetUserAsync(id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-                if (userToUpdate == null)
+                var existingUser = await _userRepository.GetUserAsync(id);
+                if (existingUser == null)
+                {
                     return NotFound($"User with Id = {id} not found");
+                }
 
-                return await _userRepository.UpdateUserAsync(user);
+                // Map the fields from DTO to the existing user entity
+                if (!string.IsNullOrWhiteSpace(updateUserDto.UserName))
+                {
+                    existingUser.UserName = updateUserDto.UserName;
+                }
+
+                if (!string.IsNullOrWhiteSpace(updateUserDto.Email))
+                {
+                    existingUser.Email = updateUserDto.Email;
+                }
+
+                var updatedUser = await _userRepository.UpdateUserAsync(existingUser);
+
+                if (updatedUser == null)
+                {
+                    return NotFound($"User with Id = {id} could not be updated.");
+                }
+
+                // Map updated user entity to UserDto (you can use AutoMapper or manual mapping)
+                var updatedUserDto = new UserDto
+                {
+                    Id = updatedUser.Id,
+                    UserName = updatedUser.UserName,
+                    Email = updatedUser.Email
+                };
+
+                return Ok(updatedUserDto);
             }
             catch (Exception)
             {
+                // TODO: log exception here
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error updating data");
             }
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<ActionResult<UserDto>> DeleteUser(int id)
         {
             try
             {
@@ -114,10 +175,27 @@ namespace CollectiveCore.Api.Controllers
                     return NotFound($"User with Id = {id} not found");
                 }
 
-                return await _userRepository.DeleteUserAsync(id);
+                var deletedUser = await _userRepository.DeleteUserAsync(id);
+
+                if (deletedUser == null)
+                {
+                    return NotFound($"User with Id = {id} could not be deleted.");
+                }
+
+                // Map to DTO before returning
+                var deletedUserDto = new UserDto
+                {
+                    Id = deletedUser.Id,
+                    UserName = deletedUser.UserName,
+                    Email = deletedUser.Email
+                };
+
+                return Ok(deletedUserDto);
+
             }
             catch (Exception)
             {
+                // TODO: Log exception here
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error deleting data");
             }

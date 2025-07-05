@@ -17,13 +17,13 @@ namespace CollectiveCore.Api.Repositories
         {
             return await _appDbContext.Users.ToListAsync();
         }
-        public async Task<User> GetUserAsync(int userId)
+        public async Task<User?> GetUserAsync(int userId)
         {
             return await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Id == userId);
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Email == email);
@@ -35,7 +35,7 @@ namespace CollectiveCore.Api.Repositories
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
-        public async Task<User> UpdateUserAsync(User user)
+        public async Task<User?> UpdateUserAsync(User user)
         {
             var result = await _appDbContext.Users
                 .FirstOrDefaultAsync(e => e.Id == user.Id);

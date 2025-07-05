@@ -17,7 +17,7 @@ namespace CollectiveCore.Api.Repositories
         {
             return await _appDbContext.Books.ToListAsync();
         }
-        public async Task<Book> GetBookAsync(int bookId)
+        public async Task<Book?> GetBookAsync(int bookId)
         {
             return await _appDbContext.Books
                 .FirstOrDefaultAsync(e => e.Id == bookId);
@@ -29,7 +29,7 @@ namespace CollectiveCore.Api.Repositories
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
-        public async Task<Book> UpdateBookAsync(Book book)
+        public async Task<Book?> UpdateBookAsync(Book book)
         {
             var result = await _appDbContext.Books
                 .FirstOrDefaultAsync(e => e.Id == book.Id);

@@ -4,13 +4,11 @@ namespace CollectiveCore.Api.DTOs
 {
     public class UpdateBookDto
     {
-        [Required(ErrorMessage = "Title is required.")]
         [StringLength(150, MinimumLength = 2, ErrorMessage = "Title must be between 2 and 150 characters.")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        [Required(ErrorMessage = "Author is required.")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Author must be between 2 and 100 characters.")]
-        public string Author { get; set; }
+        public string? Author { get; set; }
 
         [StringLength(1000, ErrorMessage = "Description can't be longer than 1000 characters.")]
         public string? Description { get; set; }
