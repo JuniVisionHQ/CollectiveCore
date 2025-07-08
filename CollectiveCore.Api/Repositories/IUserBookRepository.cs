@@ -10,6 +10,7 @@ namespace CollectiveCore.Api.Repositories
         Task<IEnumerable<UserBook>> GetUsersByBookAsync(int bookId);
 
         Task AddUserBookAsync(UserBook userBook);
+        Task UpdateUserBookAsync(UserBook userBook);
         Task RemoveUserBookAsync(UserBook userBook);
 
         Task<bool> ExistsAsync(int userId, int bookId);

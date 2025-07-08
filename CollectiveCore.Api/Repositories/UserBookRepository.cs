@@ -41,6 +41,11 @@ namespace CollectiveCore.Api.Repositories
             await _appDbContext.UserBooks.AddAsync(userBook);
             await _appDbContext.SaveChangesAsync();
         }
+        public async Task UpdateUserBookAsync(UserBook userBook)
+        {
+            // No need to call .Update() because EF is tracking the object
+            await _appDbContext.SaveChangesAsync();
+        }
         public async Task RemoveUserBookAsync(UserBook userBook)
         {
             _appDbContext.UserBooks.Remove(userBook);
