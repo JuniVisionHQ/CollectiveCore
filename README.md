@@ -3,7 +3,7 @@
 ## Overview
 
 **CollectiveCore** is a full-stack application built with a .NET Core Web API backend and a modern React + TypeScript frontend. It provides 
-a clean foundation for managing users and books, with a focus on simplicity, maintainability, and real-world development practices.
+a clean foundation for managing users and their book collections, with a focus on simplicity, maintainability, and real-world development practices.
 
 ## Features
 
