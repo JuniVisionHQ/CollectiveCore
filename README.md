@@ -26,3 +26,21 @@ a clean foundation for managing users and books, with a focus on simplicity, mai
 - **Git & GitHub** for version control and collaboration  
 
 ---
+
+## Getting Started
+
+### Backend
+
+- Open the `.NET` project in Visual Studio  
+- Press `Ctrl + F5` to run the Web API using Kestrel (`https://localhost:7091` by default)
+
+### Frontend
+
+- Navigate to the React project folder:  
+  `cd CollectiveCore.Web/React/`  
+- Install dependencies:  
+  `npm install`  
+- Start the dev server:  
+  `npm run dev` 
+
+The app is configured to run at `http://localhost:5173`. This is required to match the CORS settings in the backend API
