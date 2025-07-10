@@ -1,24 +1,17 @@
-# CollectiveCore - Book API
+# CollectiveCore
 
 ## Overview
 
-**CollectiveCore** is a clean, focused ASP.NET Core Web API project for managing users and books. It demonstrates solid backend architecture with:
-
-- Repository Pattern for abstracted data access
-- Async CRUD operations using Entity Framework Core
-- Nullable reference types and server-side model validation
-- RESTful API endpoints for managing books and users
-
-This project serves as a practical, real-world example of how to build scalable, maintainable backend services with modern .NET technologies.
-
----
+**CollectiveCore** is a full-stack application built with a .NET Core Web API backend and a modern React + TypeScript frontend. It provides 
+a clean foundation for managing users and books, with a focus on simplicity, maintainability, and real-world development practices.
 
 ## Features
 
 - Manage Users/Books: Create, Read, Update, Delete (CRUD) operations
-- Proper use of async programming and dependency injection
-- Book verification system: only verified books are trusted, unverified can be edited by owner  (coming soon!)
-- Flexible search capabilities for books based on criteria (coming soon!) 
+- User-specific (many to many) book relationships: mark books as favorites, track reading progress, etc.
+- React frontend for browsing and managing book collections with clean API endpoint integration
+- Book verification system: only verified books are trusted; unverified books remain editable by their creator (coming soon!)
+- Flexible book search and filtering by genre, author, and more (coming soon!)
 
 ---
 
@@ -26,7 +19,10 @@ This project serves as a practical, real-world example of how to build scalable,
 
 - **.NET Core**  
 - **Entity Framework Core** (Code-First + Migrations)  
-- **SQL Server / LocalDB** (configurable in `appsettings.json`)  
+- **SQL Server / LocalDB** (configurable in `appsettings.json`)
+
+- **React, TypeScript, Vite, Axios**
+
 - **Git & GitHub** for version control and collaboration  
 
 ---
