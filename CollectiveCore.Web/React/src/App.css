@@ -1,0 +1,194 @@
+/* App.css */
+
+:root {
+  --bg-color: #f8fafc;
+  --text-color: #1e293b;
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --card-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --accent-color: #3b82f6;
+  --border-color: #cbd5e1;
+}
+
+[data-theme="dark-mode"] {
+  --bg-color: #1e293b;
+  --text-color: #e2e8f0;
+  --card-bg: #3a5068;
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  --card-hover-shadow: 0 0 12px rgba(150, 180, 255, 0.15);
+  --accent-color: #818cf8;
+  --border-color: #334155;
+}
+
+[data-theme="warm-cozy"] {
+  --bg-color: #fef6f0;             /* warm parchment */
+  --text-color: #4b3a2f;           /* soft brown */
+  --card-bg: #fff9f5;              /* cozy cream */
+  --card-shadow: 0 1px 4px rgba(120, 85, 60, 0.1);
+  --card-hover-shadow: 0 2px 8px rgba(120, 85, 60, 0.15);
+  --accent-color: #d97706;         /* warm amber */
+  --border-color: #e2c8b0;
+}
+
+[data-theme="glass"] {
+  --bg-color: #e0eafc;               /* soft sky blue */
+  --text-color: #1e293b;             /* dark slate text */
+  --card-bg: rgba(255, 255, 255, .3); /* translucent card */
+  --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --accent-color: #4f46e5;           /* indigo blue */
+  --border-color: rgba(255, 255, 255, 0.3);
+}
+[data-theme="glass"] .card {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Reset & base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center; 
+}
+
+/* Page layout */
+.app-container {
+  flex: 1;
+  padding: 2rem;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Headings & spacing */
+h1, h2 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Card style */
+.card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+
+  border: 1px solid var(--border-color);
+
+}
+
+/* Accent color */
+a, button {
+  color: var(--accent-color);
+}
+
+.book-list {
+  list-style: none; /* remove default bullets */
+  padding: 0;
+  margin: 0;
+  max-width: 600px;
+}
+
+.book-item {
+  cursor: default;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+}
+
+.book-item:hover {
+  box-shadow: var(--card-hover-shadow);
+  transition: box-shadow 0.3s ease;
+}
+
+.book-item:last-child {
+  margin-bottom: 0;
+}
+
+.book-section {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.book-section h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #111;
+}
+
+/* Theme button section */
+.theme-switcher.vertical {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.theme-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+.theme-switcher.vertical button {
+  width: 80px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  text-align: right;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+}
+.theme-switcher.vertical button:hover {
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: var(--card-hover-shadow);
+}
