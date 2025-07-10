@@ -13,8 +13,8 @@ interface Book {
 
 export default function BooksList() {
   const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
-  const [loading, setLoading] = useState(true);    // loading state
-  const [error, setError] = useState<string | null>(null); // error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {

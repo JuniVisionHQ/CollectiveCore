@@ -120,7 +120,7 @@ a, button {
 }
 
 .book-list {
-  list-style: none; /* remove default bullets */
+  list-style: none;
   padding: 0;
   margin: 0;
   max-width: 600px;
