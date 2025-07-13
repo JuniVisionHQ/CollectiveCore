@@ -21,8 +21,17 @@ export default function AppLayout() {
   };
 
     return (
-    <div className="app-container">
-      <h1>CollectiveCore Web</h1>
+    <>
+    
+      <header className="app-header">
+        <h1>CollectiveCore</h1>
+
+        <nav className="main-nav">
+            <a href="/">Books</a>
+            <a href="/add-book">Add Book</a>
+            <a href="/profile">Profile</a>
+        </nav>
+      </header>
 
       <div className="theme-switcher vertical">
         <span className="theme-label">Choose Theme</span>    
@@ -32,8 +41,11 @@ export default function AppLayout() {
         <button onClick={resetTheme}>Reset</button>
       </div>
 
-      {/* Renders the matched route’s element */}
-      <Outlet />
-    </div>
+      <main className="app-container">
+        {/* Renders the matched route’s element */}
+        <Outlet />
+      </main>
+
+    </>
   );
 }

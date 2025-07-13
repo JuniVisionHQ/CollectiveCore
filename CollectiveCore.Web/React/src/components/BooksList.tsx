@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllBooks } from '../api/books';
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  description?: string;
-  genre?: string;
-  yearPublished?: number;
-  bookCoverImageUrl?: string;
-}
+import type { Book } from '../types/book';
 
 export default function BooksList() {
   const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
@@ -42,8 +33,14 @@ export default function BooksList() {
         
           <ul className="book-list">
               {books.map((book) => (
-              <li key={book.id} className="book-item card">
-                  <strong>{book.title}</strong> by {book.author}
+              <li key={book.id} className="book-item card book-card">
+                  <img
+                    src={book.bookCoverImageUrl || '/images/book-cover-placeholder.png'}
+                    alt={`Cover of ${book.title}`}
+                  />
+                  <div>
+                    <strong>{book.title}</strong> by {book.author}
+                  </div>
               </li>
               ))}
           </ul>
