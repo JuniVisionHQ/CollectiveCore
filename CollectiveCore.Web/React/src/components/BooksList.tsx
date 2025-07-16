@@ -35,7 +35,7 @@ export default function BooksList() {
               {books.map((book) => (
               <li key={book.id} className="book-item card book-card">
                   <img
-                    src={book.bookCoverImageUrl || '/images/book-cover-placeholder.png'}
+                    src={book.bookCoverImagePath || '/images/book-cover-placeholder.png'}
                     alt={`Cover of ${book.title}`}
                   />
                   <div>

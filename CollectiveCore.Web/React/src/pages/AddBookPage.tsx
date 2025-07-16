@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import type { NewBook } from '../types/book';
+import { createBookFormData } from '../utils/formDataHelpers';
 import { addBook } from '../api/books';
 
 export default function AddBookPage() {
-  const [bookData, setBookData] = useState<NewBook>({
+
+const [bookData, setBookData] = useState<NewBook>({
     title: '',
     author: '',
     description: '',
     genre: '',
     yearPublished: undefined,
-    bookCoverImageUrl: '',
   });
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+
+   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files?.[0]);
+    } else {
+      setImageFile(undefined);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setBookData((prev) => ({
       ...prev,
@@ -24,19 +35,23 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
     e.preventDefault();
 
     try {
-      await addBook(bookData);
+      const formData = createBookFormData(bookData, imageFile); // Combine data + image
+
+      await addBook(formData);  // Sends it to the API
       alert('Book added!');
+
+      //reset form
       setBookData({
         title: '',
         author: '',
         description: '',
         genre: '',
         yearPublished: undefined,
-        bookCoverImageUrl: '',
       });
+      setImageFile(undefined); // Clear file input
     } catch (error) {
       console.error('Failed to add book:', error);
-      alert('Something went wrong.');
+      alert('Something went wrong while adding the book.');
     }
   };
 
@@ -79,14 +94,17 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
           placeholder="Year Published"
           value={bookData.yearPublished ?? ''}
           onChange={handleChange}
-        />
+        />        
         <input
-          name="bookCoverImageUrl"
-          type="text"
-          placeholder="Cover Image URL"
-          value={bookData.bookCoverImageUrl}
-          onChange={handleChange}
+          type="file"
+          name="bookCoverImage"
+          accept="image/*"
+          onChange={handleImageChange}
         />
+        {imageFile && (
+          <p>Selected file: {imageFile.name}</p>
+        )}
+
         <button type="submit">Add Book</button>
       </form>
     </div>

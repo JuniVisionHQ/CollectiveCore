@@ -13,7 +13,7 @@ namespace CollectiveCore.Models
         public string? Genre { get; set; }              // Optional
         public int? YearPublished { get; set; }         // Optional
 
-        public string? BookCoverImageUrl { get; set; }  // Optional
+        public string? BookCoverImagePath { get; set; }  // Optional
 
         public List<UserBook> UserBooks { get; set; } = new();
 

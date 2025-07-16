@@ -41,7 +41,7 @@ namespace CollectiveCore.Api.Repositories
                 result.Description = book.Description;
                 result.Genre = book.Genre;
                 result.YearPublished = book.YearPublished;
-                result.BookCoverImageUrl = book.BookCoverImageUrl;
+                result.BookCoverImagePath = book.BookCoverImagePath;
 
                 await _appDbContext.SaveChangesAsync();
 

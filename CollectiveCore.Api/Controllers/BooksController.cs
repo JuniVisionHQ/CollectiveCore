@@ -12,10 +12,12 @@ namespace CollectiveCore.Api.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IWebHostEnvironment _env; //used for wwwroot
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookRepository bookRepository, IWebHostEnvironment env)
         {
             _bookRepository = bookRepository;
+            _env = env;
         }
 
         [HttpGet]
@@ -33,7 +35,7 @@ namespace CollectiveCore.Api.Controllers
                     Description = b.Description,
                     Genre = b.Genre,
                     YearPublished = b.YearPublished,
-                    BookCoverImageUrl = b.BookCoverImageUrl
+                    BookCoverImagePath = b.BookCoverImagePath
                 });
 
                 return Ok(bookDtos);
@@ -62,7 +64,7 @@ namespace CollectiveCore.Api.Controllers
                     Description = result.Description,
                     Genre = result.Genre,
                     YearPublished = result.YearPublished,
-                    BookCoverImageUrl = result.BookCoverImageUrl
+                    BookCoverImagePath = result.BookCoverImagePath
                 };
 
                 return Ok(bookDto);
@@ -76,13 +78,30 @@ namespace CollectiveCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BookDto>> CreateBook(CreateBookDto newBookDto)
+        public async Task<ActionResult<BookDto>> CreateBook([FromForm] CreateBookDto newBookDto, IFormFile? coverImageFile)
         {
             try
             {
                 if (newBookDto == null)
                 {
                     return BadRequest();
+                }
+
+                if (coverImageFile != null)
+                {
+
+                    var sanitizedTitle = SanitizeFileName(newBookDto.Title);
+
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "images");
+                    var uniqueFileName = $"{sanitizedTitle}_{Guid.NewGuid()}{Path.GetExtension(coverImageFile.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await coverImageFile.CopyToAsync(fileStream);
+                    }
+
+                    newBookDto.BookCoverImagePath = $"/images/{uniqueFileName}";
                 }
 
                 // Map DTO to Book entity
@@ -93,7 +112,7 @@ namespace CollectiveCore.Api.Controllers
                     Description = newBookDto.Description,
                     Genre = newBookDto.Genre,
                     YearPublished = newBookDto.YearPublished,
-                    BookCoverImageUrl = newBookDto.BookCoverImageUrl
+                    BookCoverImagePath = newBookDto.BookCoverImagePath
                 };
 
                 // Save to database using your repository
@@ -109,7 +128,7 @@ namespace CollectiveCore.Api.Controllers
                     Description = book.Description,
                     Genre = book.Genre,
                     YearPublished = book.YearPublished,
-                    BookCoverImageUrl = book.BookCoverImageUrl
+                    BookCoverImagePath = book.BookCoverImagePath
                 };
 
                 // Return created response with DTO
@@ -143,7 +162,7 @@ namespace CollectiveCore.Api.Controllers
                 existingBook.Description = updatedBookDto.Description;
                 existingBook.Genre = updatedBookDto.Genre;
                 existingBook.YearPublished = updatedBookDto.YearPublished;
-                existingBook.BookCoverImageUrl = updatedBookDto.BookCoverImageUrl;
+                existingBook.BookCoverImagePath = updatedBookDto.BookCoverImagePath;
 
                 // Actually save and update using the repository
                 var updatedBook = await _bookRepository.UpdateBookAsync(existingBook);
@@ -157,7 +176,7 @@ namespace CollectiveCore.Api.Controllers
                     Description = updatedBook.Description,
                     Genre = updatedBook.Genre,
                     YearPublished = updatedBook.YearPublished,
-                    BookCoverImageUrl = updatedBook.BookCoverImageUrl
+                    BookCoverImagePath = updatedBook.BookCoverImagePath
                 };
 
                 return Ok(bookDto);
@@ -190,6 +209,14 @@ namespace CollectiveCore.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error deleting data");
             }
+        }
+
+        private string SanitizeFileName(string input)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var cleaned = new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray());
+            cleaned = cleaned.Replace(' ', '_');
+            return cleaned.Length > 20 ? cleaned.Substring(0, 20) : cleaned;
         }
 
     }

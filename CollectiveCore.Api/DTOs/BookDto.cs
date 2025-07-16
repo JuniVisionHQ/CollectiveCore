@@ -8,6 +8,6 @@
         public string? Description { get; set; }
         public string? Genre { get; set; }
         public int? YearPublished { get; set; }
-        public string? BookCoverImageUrl { get; set; }
+        public string? BookCoverImagePath { get; set; }
     }
 }

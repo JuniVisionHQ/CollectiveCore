@@ -40,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Enable serving static files from wwwroot
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseCors("AllowReactApp");

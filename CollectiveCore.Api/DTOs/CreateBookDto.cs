@@ -21,7 +21,6 @@ namespace CollectiveCore.Api.DTOs
         [Range(1, 2100, ErrorMessage = "Year must be between 1 and 2100.")]
         public int? YearPublished { get; set; }
 
-        [Url(ErrorMessage = "Book cover image must be a valid URL.")]
-        public string? BookCoverImageUrl { get; set; }
+        public string? BookCoverImagePath { get; set; } // store relative path, not URL
     }
 }

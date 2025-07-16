@@ -20,4 +20,8 @@
     <ProjectReference Include="..\CollectiveCore.Models\CollectiveCore.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

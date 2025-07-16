@@ -176,6 +176,5 @@ namespace CollectiveCore.Api.Controllers
             return Ok(userBookDtos);
         }
 
-
     }
 }
