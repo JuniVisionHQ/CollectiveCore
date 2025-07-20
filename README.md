@@ -29,9 +29,23 @@ a clean foundation for managing users and their book collections, with a focus o
 
 ## Getting Started
 
+### Prerequisites
+
+Before running the app, make sure you have:
+
+- .NET 8 SDK installed
+- SQL Server running locally    
+
 ### Backend
 
-- Open the `.NET` project in Visual Studio  
+- Open the .NET project in Visual Studio (2022+)
+- Install Packages:
+    `Microsoft.EntityFrameworkCore.SqlServer`, 
+    `Microsoft.EntityFrameworkCore.Tools`
+
+- In Package Manager Console, run: 
+    `Update-Database`
+
 - Press `Ctrl + F5` to run the Web API using Kestrel (`https://localhost:7091` by default)
 
 ### Frontend
