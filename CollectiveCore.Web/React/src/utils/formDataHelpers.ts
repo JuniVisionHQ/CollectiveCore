@@ -17,7 +17,7 @@ export function createBookFormData(book: NewBook, imageFile?: File): FormData {
 
   // If imageFile is provided, append it to formData with key 'imageFile'
   if (imageFile) {
-    formData.append('imageFile', imageFile);
+    formData.append('coverImageFile', imageFile);
   }
 
   return formData;

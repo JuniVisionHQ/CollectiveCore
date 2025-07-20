@@ -5,7 +5,7 @@ export interface Book {
   description?: string;
   genre?: string;
   yearPublished?: number;
-  bookCoverImagePath?: string; // populated only if there's an uploaded image
+  bookCoverImageFileName?: string; // populated only if there's an uploaded image
 }
 
 export type NewBook = Omit<Book, 'id'>;

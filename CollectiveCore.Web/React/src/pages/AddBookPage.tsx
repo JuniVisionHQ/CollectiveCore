@@ -2,26 +2,18 @@ import React, { useState } from 'react';
 import type { NewBook } from '../types/book';
 import { createBookFormData } from '../utils/formDataHelpers';
 import { addBook } from '../api/books';
+import ImageUploader from '../components/ImageUploader';
 
 export default function AddBookPage() {
+  const [bookData, setBookData] = useState<NewBook>({
+      title: '',
+      author: '',
+      description: '',
+      genre: '',
+      yearPublished: undefined,
+    });
 
-const [bookData, setBookData] = useState<NewBook>({
-    title: '',
-    author: '',
-    description: '',
-    genre: '',
-    yearPublished: undefined,
-  });
-
-   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
-
-   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files?.[0]);
-    } else {
-      setImageFile(undefined);
-    }
-  };
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -94,16 +86,12 @@ const [bookData, setBookData] = useState<NewBook>({
           placeholder="Year Published"
           value={bookData.yearPublished ?? ''}
           onChange={handleChange}
-        />        
-        <input
-          type="file"
-          name="bookCoverImage"
-          accept="image/*"
-          onChange={handleImageChange}
         />
-        {imageFile && (
-          <p>Selected file: {imageFile.name}</p>
-        )}
+                
+        <ImageUploader
+          onFileSelect={setImageFile}
+          initialFileName={imageFile?.name}
+        />
 
         <button type="submit">Add Book</button>
       </form>

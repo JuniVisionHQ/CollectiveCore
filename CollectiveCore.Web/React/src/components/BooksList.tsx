@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getAllBooks } from '../api/books';
 import type { Book } from '../types/book';
 
+const SITE_ROOT_URL = import.meta.env.VITE_SITE_ROOT_URL;
+
 export default function BooksList() {
   const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,11 @@ export default function BooksList() {
               {books.map((book) => (
               <li key={book.id} className="book-item card book-card">
                   <img
-                    src={book.bookCoverImagePath || '/images/book-cover-placeholder.png'}
+                    src={
+                      book.bookCoverImageFileName
+                        ? `${SITE_ROOT_URL}/${book.bookCoverImageFileName}`
+                        : '/images/book-cover-placeholder.png'
+                    }
                     alt={`Cover of ${book.title}`}
                   />
                   <div>

@@ -19,6 +19,6 @@ namespace CollectiveCore.Api.DTOs
         [Range(1, 2100, ErrorMessage = "Year must be between 1 and 2100.")]
         public int? YearPublished { get; set; }
 
-        public string? BookCoverImagePath { get; set; }
+        public string? BookCoverImageFileName { get; set; }
     }
 }
