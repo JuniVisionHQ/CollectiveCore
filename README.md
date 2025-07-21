@@ -46,7 +46,7 @@ Before running the app, make sure you have:
 - In Package Manager Console, run: 
     `Update-Database`
 
-- Press `Ctrl + F5` to run the Web API using Kestrel (`https://localhost:7091` by default)
+- Press `Ctrl + F5` to run the Web API
 
 ### Frontend
 
@@ -55,6 +55,10 @@ Before running the app, make sure you have:
 - Install dependencies:  
   `npm install`  
 - Start the dev server:  
-  `npm run dev` 
+  `npm run dev`
+- Edit(or create) the .env file in the root and add the port number your .NET api is running on for the following two variables: 
+  `VITE_API_BASE_URL = https://localhost:7091/api`
+  `VITE_SITE_ROOT_URL = https://localhost:7091`
 
-The app is configured to run at `http://localhost:5173`. This is required to match the CORS settings in the backend API
+The app is configured to run at `http://localhost:5173`. This is required to match the CORS settings in the backend API.
+
