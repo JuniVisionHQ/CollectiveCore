@@ -21,7 +21,7 @@ a clean foundation for managing users and their book collections, with a focus o
 - **Entity Framework Core** (Code-First + Migrations)  
 - **SQL Server / LocalDB** (configurable in `appsettings.json`)
 
-- **React, TypeScript, Vite, Axios**
+- **React, TypeScript, Vite, Axios, Tailwind**
 
 - **Git & GitHub** for version control and collaboration  
 
