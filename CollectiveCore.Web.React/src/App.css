@@ -1,0 +1,166 @@
+/* App.css */
+
+:root {
+  --bg-color: var(--color-slate-100);
+  --bg-card-container-color: var(--color-slate-200);
+  --card-bg: var(--color-white);
+  --text-color: var(--color-slate-900);
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --card-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --accent-color: #4682b4; /* Bright Steel Blue */
+  --border-color: var(--color-coolGray-300);
+}
+
+[data-theme="dark-mode"] {
+  --bg-color: var(--color-slate-800);
+  --bg-card-container-color: var(--color-slate-900);
+  --card-bg: var(--color-slate-700);
+  --text-color: var(--color-slate-200);
+  --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --card-hover-shadow: 0 0 12px rgba(129, 140, 248, 0.15);
+  --accent-color: var(--color-indigo-400);
+  --border-color: var(--color-slate-600)
+}
+
+[data-theme="warm-cozy"] {
+  --bg-color: #fef6f0; /* Warm Parchment */
+  --bg-card-container-color: #f2e2d5; /* Weathered Parchment */
+  --text-color: #4b3a2f; /* Soft Brown */
+  --card-bg: #fff9f5; /* Cozy Cream */
+  --card-shadow: 0 2px 4px rgba(120, 85, 60, 0.06);
+  --card-hover-shadow: 0 4px 8px rgba(120, 85, 60, 0.12);
+  --accent-color: #d97706; /* Warm Amber */
+  --border-color: #e2c8b0; /* Soft Rosy Parchment */
+}
+
+/* Reset & base styles */
+* {
+  /* margin: 0;
+  padding: 0;
+  box-sizing: border-box; */
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme button section */
+.theme-switcher {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.theme-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+.theme-switcher .theme-button {
+  width: 50px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+}
+.theme-switcher .theme-button:hover {
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* Main Container */
+.myapp-main-container {
+  /* padding: 20px; */
+}
+
+.myapp-bookpage-container {
+  background-color: var(--bg-card-container-color);
+}
+
+.myapp-booklist-container {
+  /* padding: 20px; */
+}
+
+
+/* Book List */
+.book-list-section {
+  
+}
+.book-list {
+}
+
+.book-item {
+  cursor: default;
+}
+
+.book-item:hover {
+  box-shadow: var(--card-hover-shadow);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Book Card style */
+.book-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+/* Add Book form */
+.add-book-form {
+  width: 700px;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.add-book-form input,
+.add-book-form textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.add-book-form input:focus,
+.add-book-form textarea:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 5px var(--accent-color);
+}
+
+.add-book-form .theme-button {
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.add-book-form .theme-button:hover {
+  /* background-color: #1e40af; */
+}

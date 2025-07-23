@@ -48,7 +48,7 @@ export default function AddBookPage() {
   };
 
   return (
-    <div className="card">
+    <>
       <h2>Add a New Book</h2>
       <form onSubmit={handleSubmit} className="add-book-form">
         <input
@@ -95,6 +95,6 @@ export default function AddBookPage() {
 
         <button type="submit">Add Book</button>
       </form>
-    </div>
+    </>
   );
 }

@@ -49,7 +49,7 @@ export default function ImageUploader({ onFileSelect, initialFileName }: ImageUp
         accept="image/*"
         onChange={handleImageChange}
       />
-      {fileName && <p>Selected file: {fileName}</p>}
+      {fileName && <p> Selected file: {fileName}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
