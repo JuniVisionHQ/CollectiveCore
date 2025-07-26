@@ -86,7 +86,7 @@ body {
   /* padding: 20px; */
 }
 
-.myapp-bookpage-container {
+.myapp-bookpage-container, .myapp-userprofile-container {
   background-color: var(--bg-card-container-color);
 }
 

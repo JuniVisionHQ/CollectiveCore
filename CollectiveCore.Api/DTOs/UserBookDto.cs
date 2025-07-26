@@ -7,6 +7,7 @@
 
         public string Title { get; set; }         // From Book
         public string Author { get; set; }        // From Book
+        public string? BookCoverImageFileName { get; set; }  // Optional, from Book
 
         public bool IsFavorite { get; set; }
         public bool HasRead { get; set; }

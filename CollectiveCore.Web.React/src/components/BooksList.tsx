@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { getAllBooks } from '../api/books';
 import type { Book } from '../types/book';
-import { Button } from "@/shadcn/components/ui/button"
-import { ScrollArea } from "@/shadcn/components/ui/scroll-area"
 
 const SITE_ROOT_URL = import.meta.env.VITE_SITE_ROOT_URL;
 
-export default function BooksList() {
-  const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-        try {
-            const booksResponse = await getAllBooks(); // from books.ts
-            setBooks(booksResponse);
-        } catch (err) {
-            setError('Failed to load books.');
-        } finally {
-            setLoading(false);
-        }
+  type Props = {
+    books: Book[];
+    loading: boolean;
+    error: string | null;
+    onSelectBook: (book: Book) => void;
   };
 
-  fetchBooks();
+export default function BooksList({ books, loading, error, onSelectBook }: Props) {
+    if (loading) return <div className="p-4 text-gray-500">Loading books…</div>;
 
-  }, []);
+    if (error) return <div className="p-4 text-red-500">{error}</div>;
+
+    if (books.length === 0) {
+      return <div className="p-4 text-gray-500">No books found.</div>;
+    }
 
   return (
     
@@ -39,10 +31,13 @@ export default function BooksList() {
 
      {!loading && !error && (
       <section className="book-list-section">              
-          <ul className="grid gap-4 p-2
-      grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+          <ul className="grid gap-4 p-2 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
               {books.map((book) => (
-              <li key={book.id} className="book-item book-card aspect-[5/2] flex rounded-md p-2 max-w-[320px]">
+              <li 
+                key={book.id} 
+                className="book-item book-card aspect-[5/2] flex rounded-md p-2 max-w-[320px]"
+                onClick={() => onSelectBook(book)}
+                >
                 <div className="book-image-container flex-shrink-0 w-1/4 h-full overflow-hidden">
                   <img
                     src={
@@ -63,7 +58,6 @@ export default function BooksList() {
           </ul>
         </section>
      )}
-
 
     </div>
   );

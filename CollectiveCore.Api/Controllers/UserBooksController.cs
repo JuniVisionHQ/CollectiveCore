@@ -169,6 +169,7 @@ namespace CollectiveCore.Api.Controllers
                 BookId = ub.BookId,
                 Title = ub.Book?.Title ?? "(Unknown)",
                 Author = ub.Book?.Author ?? "(Unknown)",
+                BookCoverImageFileName = ub.Book?.BookCoverImageFileName,
                 IsFavorite = ub.IsFavorite,
                 HasRead = ub.HasRead
             });
