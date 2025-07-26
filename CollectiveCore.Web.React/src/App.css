@@ -82,26 +82,12 @@ body {
 }
 
 /* Main Container */
-.myapp-main-container {
-  /* padding: 20px; */
-}
-
 .myapp-bookpage-container, .myapp-userprofile-container {
   background-color: var(--bg-card-container-color);
 }
 
-.myapp-booklist-container {
-  /* padding: 20px; */
-}
 
-
-/* Book List */
-.book-list-section {
-  
-}
-.book-list {
-}
-
+/* Book List*/
 .book-item {
   cursor: default;
 }
@@ -159,8 +145,4 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.25s ease;
-}
-
-.add-book-form .theme-button:hover {
-  /* background-color: #1e40af; */
 }

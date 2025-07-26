@@ -1,4 +1,3 @@
-import React from 'react';
 import type { UserBook } from '../types/userBook';
 
 const SITE_ROOT_URL = import.meta.env.VITE_SITE_ROOT_URL;
@@ -41,8 +40,8 @@ export default function UserBooksList({ userBooks, userBooksLoading, userBooksEr
               <p className="font-bold line-clamp-2">{ub.title}</p>
               <p className="text-sm text-gray-700 truncate">{ub.author}</p>
               <div className="text-xs text-gray-600 mt-1">
-                {ub.isFavorite && <span>🌟 Favorite</span>}
-                {ub.hasRead && <span className="ml-2">✅ Read</span>}
+                {ub.isFavorite && <span>Favorite</span>}
+                {ub.hasRead && <span className="ml-2">Read</span>}
               </div>
             </div>
           </li>

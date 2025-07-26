@@ -77,16 +77,14 @@ export default function UserProfilePage() {
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
     if (!user) return <p>User not found.</p>;
 
-    // Handler: when user clicks a book in the list
+    // User clicks a book in the list
      function handleSelectBook(userBook: UserBook) {
         setSelectedUserBook(userBook);
-        // Construct a minimal Book object from userBook info (or fetch full book if needed)
         setSelectedBook({
           id: userBook.bookId,
           title: userBook.title,
           author: userBook.author,
           bookCoverImageFileName: userBook.bookCoverImageFileName ?? '',
-          // You can add other book properties here if you have them in UserBook
         });
     }
 

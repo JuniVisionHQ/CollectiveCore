@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import type { Book } from '../types/book';
 
 const SITE_ROOT_URL = import.meta.env.VITE_SITE_ROOT_URL;

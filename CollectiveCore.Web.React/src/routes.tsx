@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter } from 'react-router';
 import AppLayout from './layouts/AppLayout';
 import BookListPage from './pages/BookListPage';

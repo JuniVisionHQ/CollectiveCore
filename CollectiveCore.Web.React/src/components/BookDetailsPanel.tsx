@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Book } from '../types/book';
 import type { UserBook } from '../types/userBook';
 
@@ -24,7 +23,7 @@ export default function BookDetailsPanel({ book, userBook }: BookDetailsPanelPro
           <p>Read: {userBook.hasRead ? 'Yes' : 'No'}</p>
         </div>
       )}
-      
+
     </div>
   );
 }
