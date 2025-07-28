@@ -40,14 +40,20 @@ export default function ImageUploader({ onFileSelect, initialFileName }: ImageUp
 };
 
   return (
-    <div>
-      <label htmlFor="imageFile">Book Cover Image</label>
+    <div className="flex items-center gap-2 mt-4">
+      <label 
+        htmlFor="imageFile" 
+        className="upload-cover-image-label cursor-pointer">
+        Choose Book Cover Image
+      </label>
+
       <input
         id="imageFile"
         name="imageFile"
         type="file"
         accept="image/*"
         onChange={handleImageChange}
+        className="hidden"
       />
       {fileName && <p> Selected file: {fileName}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}

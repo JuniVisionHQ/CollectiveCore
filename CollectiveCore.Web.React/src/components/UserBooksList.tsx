@@ -10,9 +10,9 @@ type Props = {
 };
 
 export default function UserBooksList({ userBooks, userBooksLoading, userBooksError, onSelectBook }: Props) {
-  if (userBooksLoading) return <div className="p-4 text-gray-500">Loading your books…</div>;
+  if (userBooksLoading) return <div className="p-4">Loading your books…</div>;
   if (userBooksError) return <div className="p-4 text-red-500">{userBooksError}</div>;
-  if (userBooks.length === 0) return <div className="p-4 text-gray-500">You haven’t added any books yet.</div>;
+  if (userBooks.length === 0) return <div className="p-4">You haven't added any books yet.</div>;
 
   return (
     <div className="myapp-booklist-container flex-1 min-h-0 overflow-y-auto scroll-smooth [scrollbar-gutter:stable] scrollbar-thin p-4">
@@ -38,8 +38,8 @@ export default function UserBooksList({ userBooks, userBooksLoading, userBooksEr
             </div>
             <div className="book-info flex flex-col justify-center px-2 overflow-hidden w-3/4">
               <p className="font-bold line-clamp-2">{ub.title}</p>
-              <p className="text-sm text-gray-700 truncate">{ub.author}</p>
-              <div className="text-xs text-gray-600 mt-1">
+              <p className="text-sm truncate">{ub.author}</p>
+              <div className="text-xs mt-1">
                 {ub.isFavorite && <span>Favorite</span>}
                 {ub.hasRead && <span className="ml-2">Read</span>}
               </div>

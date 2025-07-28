@@ -9,6 +9,7 @@
   --card-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --accent-color: #4682b4; /* Bright Steel Blue */
   --border-color: var(--color-coolGray-300);
+  --panel-border-color: #4682b4;
 }
 
 [data-theme="dark-mode"] {
@@ -19,7 +20,8 @@
   --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   --card-hover-shadow: 0 0 12px rgba(129, 140, 248, 0.15);
   --accent-color: var(--color-indigo-400);
-  --border-color: var(--color-slate-600)
+  --border-color: var(--color-slate-600);
+  --panel-border-color: var(--color-white);
 }
 
 [data-theme="warm-cozy"] {
@@ -31,6 +33,7 @@
   --card-hover-shadow: 0 4px 8px rgba(120, 85, 60, 0.12);
   --accent-color: #d97706; /* Warm Amber */
   --border-color: #e2c8b0; /* Soft Rosy Parchment */
+  --panel-border-color: #d97706;
 }
 
 /* Reset & base styles */
@@ -80,6 +83,14 @@ body {
   color: white;
   box-shadow: var(--card-hover-shadow);
 }
+.resizeable-border-color {
+  border-top: 1px solid var(--panel-border-color);
+  border-bottom: 0px;
+}
+.resizeable-withHandle-color {
+  outline: 1px solid var(--panel-border-color);
+  /* border-left: 1px solid var(--panel-border-color); */
+}
 
 /* Main Container */
 .myapp-bookpage-container, .myapp-userprofile-container {
@@ -120,13 +131,25 @@ body {
 }
 
 .add-book-form input,
-.add-book-form textarea {
+.add-book-form textarea, 
+.upload-cover-image-label {
   padding: 0.6rem 0.8rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--accent-color);
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
   transition: border-color 0.3s ease;
+}
+
+.add-book-form input::placeholder,
+.add-book-form textarea::placeholder {
+  color: var(--text-color);
+  opacity: .8;
+}
+
+.upload-cover-image-label {
+  color: var(--text-color);
+  opacity: .8;
 }
 
 .add-book-form input:focus,

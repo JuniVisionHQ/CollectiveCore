@@ -50,7 +50,7 @@ export default function BooksList({ books, loading, error, onSelectBook }: Props
                 </div>
                  <div className="book-info flex flex-col justify-center px-2 overflow-hidden w-3/4">
                   <p className="font-bold line-clamp-2">{book.title}</p>
-                  <p className="text-sm text-gray-700 truncate">{book.author}</p>
+                  <p className="text-sm truncate">{book.author}</p>
                 </div>
               </li>
               ))}

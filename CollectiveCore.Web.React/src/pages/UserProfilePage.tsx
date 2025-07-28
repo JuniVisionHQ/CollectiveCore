@@ -90,14 +90,14 @@ export default function UserProfilePage() {
 
     return (
         <div className="myapp-userprofile-container h-[80vh] flex flex-col flex-1 min-h-0">
-            <ResizablePanelGroup direction="vertical" className="border flex-1 min-h-0">
-                <ResizablePanel defaultSize={20} className="flex flex-col min-h-0 ">
-                    <h1>User Profile</h1>
+            <ResizablePanelGroup direction="vertical" className="border flex-1 min-h-0 border-none">
+                <ResizablePanel defaultSize={10} className="flex flex-col min-h-0 p-4">
+                    {/* <h1>User Profile</h1> */}
                     <UserProfile user={user} />
 
                 </ResizablePanel>
-                <ResizablePanel defaultSize={80} className="flex flex-col min-h-0">
-                    <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0">
+                <ResizablePanel defaultSize={90} className="flex flex-col min-h-0 resizeable-border-color">
+                    <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0 border-none">
                         <ResizablePanel defaultSize={40} className="flex flex-col min-h-0">
                             {isLoggedIn ? (
                             <UserBooksList
@@ -107,11 +107,11 @@ export default function UserProfilePage() {
                                 onSelectBook={handleSelectBook} // Pass the whole UserBook
                                 />
                             ) : (
-                                <p className="p-4 text-gray-600">Please log in to see your books.</p>
+                                <p className="p-4">Please log in to see your books.</p>
                             )}
                         </ResizablePanel>
 
-                        <ResizableHandle withHandle />
+                        <ResizableHandle withHandle className="resizeable-withHandle-color"/>
 
                         <ResizablePanel defaultSize={60} className="flex flex-col min-h-0">
                             {/* Pass both book and userBook to details */}

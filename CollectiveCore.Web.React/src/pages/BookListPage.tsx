@@ -31,7 +31,7 @@ export default function BookListPage() {
 
   return (
     <div className="myapp-bookpage-container h-[80vh] flex flex-col flex-1 min-h-0"> 
-      <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0">
+      <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0 border-none">
         <ResizablePanel defaultSize={40} className="flex flex-col min-h-0">
           <BooksList
             books={books}
@@ -41,9 +41,9 @@ export default function BookListPage() {
           
           />
         </ResizablePanel>
-        <ResizableHandle withHandle/>
+        <ResizableHandle withHandle className="resizeable-withHandle-color"/>
         <ResizablePanel defaultSize={60} className="flex flex-col min-h-0">
-          <BookDetailsPanel book={selectedBook} userBook={null}/> {/*Book details in right panel*/}
+          <BookDetailsPanel book={selectedBook} userBook={null}/>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

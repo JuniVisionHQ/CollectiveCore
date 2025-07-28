@@ -6,9 +6,9 @@ type UserProfileProps = {
 
 export default function UserProfile({ user }: UserProfileProps) {
   return (
-    <div className="user-profile card p-4">
-      <h2>{user.userName}</h2>
-      <p>Email: {user.email}</p>
+    <div className="user-profile">
+      <h2 className="text-2xl font-semibold mb-1">User Profile: {user.userName}</h2>
+      <p className="">Email: {user.email}</p>
       {/* Add more user details here later */}
     </div>
   );
