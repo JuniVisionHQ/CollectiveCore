@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 import type { User } from '../types/user';
 import type { Book } from '../types/book';
 import type { UserBook } from '../types/userBook';
 import BookDetailsPanel from '../components/BookDetailsPanel';
-
-import { getUserById } from '../api/users';
 import { getBooksByUser } from '../api/userBooks';
+import { getCurrentUserBooks } from '../api/userBooks';
 
 import UserProfile from '../components/UserProfile';
 import UserBooksList from '../components/UserBooksList';
@@ -13,10 +14,7 @@ import UserBooksList from '../components/UserBooksList';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup, } from "@/shadcn/components/ui/resizable";
 
 export default function UserProfilePage() {
-
-    const userId = 1; // Hardcoded for now
-    
-    const isLoggedIn = true; // TODO: Replace with actual auth logic
+    const { isAuthenticated, isLoading: authLoading, getAccessTokenSilently } = useAuth0();
 
     // User data
     const [user, setUser] = useState<User | null>(null);
@@ -32,36 +30,48 @@ export default function UserProfilePage() {
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const [selectedUserBook, setSelectedUserBook] = useState<UserBook | null>(null);
 
-    // Fetch user
     useEffect(() => {
-        async function fetchUser() {
-            setLoading(true);
-            setError(null);
+        const fetchUser = async () => {
+            if (!isAuthenticated) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
 
             try {
-                const userData = await getUserById(userId);
-                setUser(userData);
-            } catch (err) {
-                setError('Failed to load user data');
+                const token = await getAccessTokenSilently();
+                const response = await axios.get<User>('/api/users/me', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error('Failed to fetch user', error);
+                setUser(null);
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchUser();
-    }, [userId]);
-
+    }, [isAuthenticated, getAccessTokenSilently]);
 
     // Fetch userBooks only if logged in
     useEffect(() => {
-        if (!isLoggedIn) return;
+        if (!isAuthenticated) return;
 
         async function fetchUserBooks() {
             setUserBooksLoading(true);
             setUserBooksError(null);
 
             try {
-                const userBooksData = await getBooksByUser(userId);
+                const token = await getAccessTokenSilently();
+
+                const userBooksData = await getCurrentUserBooks(token);
+                // const userBooksData = await getBooksByUser(userId);
+                //const userBooksData = await getCurrentUserBooks(); 
+                // setUserBooks(userBooksData);
                 setUserBooks(userBooksData);
             } catch {
                 setUserBooksError('Failed to load user books');
@@ -71,20 +81,21 @@ export default function UserProfilePage() {
         }
 
         fetchUserBooks();
-    }, [userId, isLoggedIn]);
+    }, [isAuthenticated, getAccessTokenSilently]);
 
-    if (loading) return <p>Loading user profile...</p>;
+    if (authLoading || loading) return <p>Loading user profile...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
+    if (!isAuthenticated) return <p>You must be logged in to view this page.</p>;
     if (!user) return <p>User not found.</p>;
 
     // User clicks a book in the list
-     function handleSelectBook(userBook: UserBook) {
+    function handleSelectBook(userBook: UserBook) {
         setSelectedUserBook(userBook);
         setSelectedBook({
-          id: userBook.bookId,
-          title: userBook.title,
-          author: userBook.author,
-          bookCoverImageFileName: userBook.bookCoverImageFileName ?? '',
+            id: userBook.bookId,
+            title: userBook.title,
+            author: userBook.author,
+            bookCoverImageFileName: userBook.bookCoverImageFileName ?? '',
         });
     }
 
@@ -99,26 +110,23 @@ export default function UserProfilePage() {
                 <ResizablePanel defaultSize={90} className="flex flex-col min-h-0 resizeable-border-color">
                     <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0 border-none">
                         <ResizablePanel defaultSize={40} className="flex flex-col min-h-0">
-                            {isLoggedIn ? (
-                            <UserBooksList
-                                userBooks={userBooks}
-                                userBooksLoading={userBooksLoading}
-                                userBooksError={userBooksError}
-                                onSelectBook={handleSelectBook} // Pass the whole UserBook
+                            {isAuthenticated ? (
+                                <UserBooksList
+                                    userBooks={userBooks}
+                                    userBooksLoading={userBooksLoading}
+                                    userBooksError={userBooksError}
+                                    onSelectBook={handleSelectBook} // Pass the whole UserBook
                                 />
                             ) : (
                                 <p className="p-4">Please log in to see your books.</p>
                             )}
                         </ResizablePanel>
 
-                        <ResizableHandle withHandle className="resizeable-withHandle-color"/>
+                        <ResizableHandle withHandle className="resizeable-withHandle-color" />
 
                         <ResizablePanel defaultSize={60} className="flex flex-col min-h-0">
                             {/* Pass both book and userBook to details */}
-                            <BookDetailsPanel
-                                book={selectedBook}
-                                userBook={selectedUserBook}
-                            />
+          
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 </ResizablePanel>

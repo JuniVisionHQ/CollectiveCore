@@ -1,49 +1,122 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useOutletContext } from 'react-router';
+
 import BooksList from '../components/BooksList';
 import BookDetailsPanel from '../components/BookDetailsPanel';
+
 import { getAllBooks } from '../api/books';
+import { getCurrentUserBooks, addBookToUser } from '../api/userBooks';
+
 import type { Book } from '../types/book';
+import type { User } from '../types/user';
+import type { UserBook } from "../types/userBook";
+
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup, } from "@/shadcn/components/ui/resizable"
 
+type OutletContextType = {
+  currentUser: User | null;
+};
+
 export default function BookListPage() {
+  const { currentUser } = useOutletContext<OutletContextType>();
   const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
+  const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { isAuthenticated, isLoading: authLoading, getAccessTokenSilently } = useAuth0();
+
+   // Fetch all books (public)
   useEffect(() => {
     const fetchBooks = async () => {
-        try {
-            const booksResponse = await getAllBooks(); // from books.ts
-            setBooks(booksResponse);
-            setError(null);
-        } catch (err) {
-            console.error('Failed to fetch books:', err);
-            setError("Something went wrong while loading your books."); 
-        } finally {
-            setLoading(false);
-        }
-  };
+      try {
+        setLoading(true);
+        setError(null);
 
-  fetchBooks();
+        // Always fetch all books
+        const allBooksResponse = await getAllBooks(); // from books.ts
+        setBooks(allBooksResponse);
 
+      } catch (err) {
+        console.error('Failed to fetch books:', err);
+        setError("Something went wrong while loading your books.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBooks();
   }, []);
 
+
+  // Fetch user's books (private) when authenticated
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      if (!isAuthenticated) {
+        setUserBooks([]);
+        return;
+      }
+      try {
+        const token = await getAccessTokenSilently();
+        const userBooksResponse = await getCurrentUserBooks(token);
+        setUserBooks(userBooksResponse);
+      } catch (err) {
+        console.error("Failed to fetch user books:", err);
+        setUserBooks([]);
+      }
+    };
+
+    if (!authLoading) fetchUserBooks();
+  }, [isAuthenticated, authLoading, getAccessTokenSilently]);
+
+   // Add book to current user's collection
+  const handleAddToCollection = async (bookId: number) => {
+    if (!isAuthenticated) return;
+
+    try {
+      const token = await getAccessTokenSilently();
+      await addBookToUser(token, bookId);
+
+      // Refresh userBooks after adding
+      const updatedBooks = await getCurrentUserBooks(token);
+      setUserBooks(updatedBooks);
+    } catch (err) {
+      console.error("Error adding book to collection:", err);
+    }
+  };
+
+  if (loading) return <p>Loading books...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
+  
+
   return (
-    <div className="myapp-bookpage-container h-[80vh] flex flex-col flex-1 min-h-0"> 
+    <div className="myapp-bookpage-container h-[80vh] flex flex-col flex-1 min-h-0">
       <ResizablePanelGroup direction="horizontal" className="border flex-1 min-h-0 border-none">
         <ResizablePanel defaultSize={40} className="flex flex-col min-h-0">
           <BooksList
             books={books}
-            loading={loading}
-            error={error}
+            userBooks={userBooks}
             onSelectBook={setSelectedBook}
-          
+            isAuthenticated={!!currentUser} //Using currentUser instead of Auth0 directly
+            onAddToCollection={handleAddToCollection}
           />
         </ResizablePanel>
-        <ResizableHandle withHandle className="resizeable-withHandle-color"/>
+
+        <ResizableHandle withHandle className="resizeable-withHandle-color" />
+        
         <ResizablePanel defaultSize={60} className="flex flex-col min-h-0">
-          <BookDetailsPanel book={selectedBook} userBook={null}/>
+          <BookDetailsPanel
+            book={selectedBook}
+            userBook={
+              selectedBook
+                ? userBooks.find((ub) => ub.bookId === selectedBook.id) || null
+                : null
+            }
+            onAddToCollection={handleAddToCollection}
+          />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

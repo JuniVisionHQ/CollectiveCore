@@ -6,12 +6,15 @@ const SITE_ROOT_URL = import.meta.env.VITE_SITE_ROOT_URL;
 type BookDetailsPanelProps = {
   book: Book | null;
   userBook: UserBook | null;
+  onAddToCollection: (bookId: number) => void;
 };
 
-export default function BookDetailsPanel({ book, userBook }: BookDetailsPanelProps) {
+export default function BookDetailsPanel({ book, userBook, onAddToCollection }: BookDetailsPanelProps) {
   if (!book) {
     return <p className="p-6">Select a book to view details</p>;
   }
+
+  const inCollection = !!userBook; // true if user already owns this book
 
   return (
     <div className="p-4 flex flex-col py-16">
@@ -38,15 +41,19 @@ export default function BookDetailsPanel({ book, userBook }: BookDetailsPanelPro
         </div>
       </div>
       {/* User Notes */}
-      <div className="flex flex-col">
-        {/* User Flags */}
-          {userBook && (
-            <div className="mt-4 text-sm">
-              <p>Favorite: {userBook.isFavorite ? 'Yes' : 'No'}</p>
-              <p>Read: {userBook.hasRead ? 'Yes' : 'No'}</p>
-              <h3 className="font-semibold mt-2 py-1">Notes</h3>
-              <p className="py-1">Notes here</p>
-            </div>
+      <div className="book-flags flex flex-col">
+       {/* Collection Status */}
+          {inCollection ? (
+            <p className="text-green-600 text-sm font-semibold mt-2">✔ In Your Collection</p>
+          ) : (
+            <p>
+            <button
+              className="text-blue-600 text-sm mt-2 font-medium hover:text-blue-800 cursor-pointer"
+              onClick={() => onAddToCollection(book.id)}
+            >
+              + Add to My Collection
+            </button>
+            </p>       
           )}
       </div>
     </div>

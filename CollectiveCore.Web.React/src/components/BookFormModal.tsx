@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import type { NewBook } from '../types/book';
 import { createBookFormData } from '../utils/formDataHelpers';
 import { addBook } from '../api/books';
+import { addBookToUser } from '../api/userBooks';
 import ImageUploader from '../components/ImageUploader';
 
 type BookFormModalProps = {
@@ -23,7 +25,10 @@ export default function BookFormModal({ isOpen, onClose, mode }: BookFormModalPr
 
     const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
-    // Reset form when modal opens/closes
+    // Auth0 hook to get token
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+    // Reset form when modal closes
     useEffect(() => {
         if (!isOpen) {
             setBookData({
@@ -49,11 +54,17 @@ export default function BookFormModal({ isOpen, onClose, mode }: BookFormModalPr
         e.preventDefault();
 
         try {
+            //Create book
             const formData = createBookFormData(bookData, imageFile); // Combine data + image
+            const newBook = await addBook(formData);
 
-            await addBook(formData);  // Sends it to the API
+            // If logged in, attach it to the user
+            if (isAuthenticated) {
+                const token = await getAccessTokenSilently();
+                await addBookToUser(token, newBook.id); // attach new book
+            }
+
             alert('Book added!');
-
             onClose(); // Close modal on success
         } catch (error) {
             console.error('Failed to add book:', error);

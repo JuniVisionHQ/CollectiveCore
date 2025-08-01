@@ -12,3 +12,18 @@ export async function getUserById(id: number): Promise<User> {
     throw error;
   }
 }
+
+// This takes care of both get or add
+export async function getCurrentUser(token: string): Promise<User> {
+  try {
+    const response = await axios.get<User>(`${API_BASE_URL}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch current user:', error);
+    throw error;
+  }
+}

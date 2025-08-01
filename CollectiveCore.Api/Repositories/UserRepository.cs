@@ -29,6 +29,16 @@ namespace CollectiveCore.Api.Repositories
                 .FirstOrDefaultAsync(e => e.Email == email);
         }
 
+        public async Task<User?> GetUserByAuth0UserIdAsync(string auth0UserId)
+        {
+            return await _appDbContext.Users
+                .FirstOrDefaultAsync(u => u.Auth0UserId == auth0UserId);
+        }
+        public async Task<User?> GetUserByUserNameAsync(string userName)
+        {
+            return await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        }
+
         public async Task<User> AddUserAsync(User user)
         {
             var result = await _appDbContext.Users.AddAsync(user);

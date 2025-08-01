@@ -11,5 +11,8 @@ namespace CollectiveCore.Api.Repositories
         Task<User?> DeleteUserAsync(int userId);
 
         Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByAuth0UserIdAsync(string auth0UserId);
+
+        Task<User?> GetUserByUserNameAsync(string userName);
     }
 }

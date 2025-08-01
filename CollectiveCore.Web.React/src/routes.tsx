@@ -11,8 +11,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />, // layout with theme switcher and outlet
     children: [
       { index: true, element: <BookListPage /> }, // default page at "/"
-      // { path: 'add-book', element: <AddBookPage /> },
-      { path: 'profile', element: <UserProfilePage /> },
+      // { path: 'profile', element: <UserProfilePage /> },
       
     ],
   },

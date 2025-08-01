@@ -24,6 +24,9 @@ packages/
 # Environment variables
 .env
 
+# Ignore production appsettings file with secrets
+appsettings.Production.json
+
 # Entity Framework Migrations (keep these tracked, so no ignore!)
 
 # Database files
