@@ -10,9 +10,10 @@ type BookFormModalProps = {
     isOpen: boolean;
     onClose: () => void;
     mode: 'create' | 'edit';
+    onBookAdded?: () => void;
 };
 
-export default function BookFormModal({ isOpen, onClose, mode }: BookFormModalProps) {
+export default function BookFormModal({ isOpen, onClose, mode, onBookAdded }: BookFormModalProps) {
     // Pass existing book data as props in the future for "edit" mode
     // For now it resets on close/open
     const [bookData, setBookData] = useState<NewBook>({
@@ -65,6 +66,7 @@ export default function BookFormModal({ isOpen, onClose, mode }: BookFormModalPr
             }
 
             alert('Book added!');
+            if (onBookAdded) onBookAdded();
             onClose(); // Close modal on success
         } catch (error) {
             console.error('Failed to add book:', error);

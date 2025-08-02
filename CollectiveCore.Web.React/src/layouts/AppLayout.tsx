@@ -13,6 +13,9 @@ export default function AppLayout() {
   const { isAuthenticated, getAccessTokenSilently, loginWithRedirect } = useAuth0();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+    // key that will trigger refresh
+  const [refreshKey, setRefreshKey] = useState(0);
+
   // Fetch current user after login
   useEffect(() => {
     async function fetchCurrentUser() {
@@ -93,11 +96,12 @@ export default function AppLayout() {
         isOpen={isBookModalOpen}
         onClose={() => setIsBookModalOpen(false)}
         mode="create"
+        onBookAdded={() => setRefreshKey((prev) => prev + 1)} // Pass callback to modal
       />
 
       <main className="myapp-main-container w-full h-full">
         {/* Renders the matched route’s element */}
-        <Outlet context={{ currentUser }} />
+        <Outlet context={{ currentUser, refreshKey, setRefreshKey }} />
       </main>
 
     </div>

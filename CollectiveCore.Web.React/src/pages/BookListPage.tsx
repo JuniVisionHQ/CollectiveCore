@@ -6,7 +6,7 @@ import BooksList from '../components/BooksList';
 import BookDetailsPanel from '../components/BookDetailsPanel';
 
 import { getAllBooks } from '../api/books';
-import { getCurrentUserBooks, addBookToUser } from '../api/userBooks';
+import { getCurrentUserBooks, addBookToUser, removeBookFromUser } from '../api/userBooks';
 
 import type { Book } from '../types/book';
 import type { User } from '../types/user';
@@ -16,10 +16,11 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup, } from "@/shadcn/
 
 type OutletContextType = {
   currentUser: User | null;
+  refreshKey: number;
 };
 
 export default function BookListPage() {
-  const { currentUser } = useOutletContext<OutletContextType>();
+  const { currentUser, refreshKey } = useOutletContext<OutletContextType>();
   const [books, setBooks] = useState<Book[]>([]);  // state to hold books array
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
@@ -48,7 +49,7 @@ export default function BookListPage() {
     }
 
     fetchBooks();
-  }, []);
+  }, [refreshKey]); // Refetch when refreshKey changes
 
 
   // Fetch user's books (private) when authenticated
@@ -69,7 +70,7 @@ export default function BookListPage() {
     };
 
     if (!authLoading) fetchUserBooks();
-  }, [isAuthenticated, authLoading, getAccessTokenSilently]);
+  }, [isAuthenticated, authLoading, getAccessTokenSilently, refreshKey]); // also refresh userBooks
 
    // Add book to current user's collection
   const handleAddToCollection = async (bookId: number) => {
@@ -79,7 +80,23 @@ export default function BookListPage() {
       const token = await getAccessTokenSilently();
       await addBookToUser(token, bookId);
 
-      // Refresh userBooks after adding
+      // Just update userBooks – avoids full refresh
+      const updatedBooks = await getCurrentUserBooks(token);
+      setUserBooks(updatedBooks);
+    } catch (err) {
+      console.error("Error adding book to collection:", err);
+    }
+  };
+
+  // Remove book to current user's collection
+  const handleRemoveFromCollection = async (bookId: number) => {
+    if (!isAuthenticated) return;
+
+    try {
+      const token = await getAccessTokenSilently();
+      await removeBookFromUser(token, bookId);
+
+      // Refresh userBooks and allBooks after removing
       const updatedBooks = await getCurrentUserBooks(token);
       setUserBooks(updatedBooks);
     } catch (err) {
@@ -88,9 +105,7 @@ export default function BookListPage() {
   };
 
   if (loading) return <p>Loading books...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-
-  
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;  
 
   return (
     <div className="myapp-bookpage-container h-[80vh] flex flex-col flex-1 min-h-0">
@@ -116,6 +131,7 @@ export default function BookListPage() {
                 : null
             }
             onAddToCollection={handleAddToCollection}
+            onRemoveFromCollection={handleRemoveFromCollection}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

@@ -7,9 +7,10 @@ type BookDetailsPanelProps = {
   book: Book | null;
   userBook: UserBook | null;
   onAddToCollection: (bookId: number) => void;
+  onRemoveFromCollection: (bookId: number) => void;
 };
 
-export default function BookDetailsPanel({ book, userBook, onAddToCollection }: BookDetailsPanelProps) {
+export default function BookDetailsPanel({ book, userBook, onAddToCollection, onRemoveFromCollection }: BookDetailsPanelProps) {
   if (!book) {
     return <p className="p-6">Select a book to view details</p>;
   }
@@ -41,19 +42,27 @@ export default function BookDetailsPanel({ book, userBook, onAddToCollection }: 
         </div>
       </div>
       {/* User Notes */}
-      <div className="book-flags flex flex-col">
+      <div className="book-flags flex flex-col items-start">
        {/* Collection Status */}
           {inCollection ? (
-            <p className="text-green-600 text-sm font-semibold mt-2">✔ In Your Collection</p>
-          ) : (
-            <p>
+            <p className="text-green-600 text-sm font-semibold my-2 mx-2">✔ In Your Collection{" "}
             <button
-              className="text-blue-600 text-sm mt-2 font-medium hover:text-blue-800 cursor-pointer"
+              type="button"
+              className="text-red-600 text-sm mx-2 font-medium hover:text-blue-800 cursor-pointer"
+              onClick={() => onRemoveFromCollection(book.id)}   
+              // To Do: add Remove from Collection logic           
+            > ( x remove )
+            </button>   
+            
+            </p>
+          ) : (
+            <button
+              type="button"
+              className="text-blue-600 text-sm my-2 mx-2 font-medium hover:text-blue-800 cursor-pointer"
               onClick={() => onAddToCollection(book.id)}
             >
               + Add to My Collection
-            </button>
-            </p>       
+            </button>     
           )}
       </div>
     </div>

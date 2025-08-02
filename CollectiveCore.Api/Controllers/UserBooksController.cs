@@ -291,12 +291,20 @@ namespace CollectiveCore.Api.Controllers
         //    // ... similar pattern to AddBookToCurrentUser
         //}
 
-        //[HttpDelete("me/{bookId:int}")]
-        //[Authorize]
-        //public async Task<IActionResult> RemoveBookFromCurrentUser(int bookId)
-        //{
-        //    // ... similar pattern to AddBookToCurrentUser
-        //}
+        [HttpDelete("me/{bookId}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveBookFromCurrentUser(int bookId)
+        {
+            var userId = await GetCurrentUserIdFromTokenAsync(); //Helper function
+            if (userId == null) return NotFound("User not found.");
+
+            // Get the UserBook relationship first
+            var userBook = await _userBookRepository.GetUserBookRelationshipAsync(userId.Value, bookId);
+            if (userBook == null) return NotFound("Book not found in your collection.");
+
+            await _userBookRepository.RemoveUserBookAsync(userBook);
+            return NoContent();
+        }
 
         // Helper Function
         private async Task<int?> GetCurrentUserIdFromTokenAsync()
