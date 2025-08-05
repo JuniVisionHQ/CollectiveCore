@@ -5,6 +5,7 @@ import { createBookFormData } from '../utils/formDataHelpers';
 import { addBook } from '../api/books';
 import { addBookToUser } from '../api/userBooks';
 import ImageUploader from '../components/ImageUploader';
+import { toast } from 'react-hot-toast';
 
 type BookFormModalProps = {
     isOpen: boolean;
@@ -65,12 +66,18 @@ export default function BookFormModal({ isOpen, onClose, mode, onBookAdded }: Bo
                 await addBookToUser(token, newBook.id); // attach new book
             }
 
-            alert('Book added!');
+            toast.success('Book added successfully!', {
+                position: 'bottom-right', // You can also use 'top-left', 'bottom-right', etc.
+                duration: 3000, // Toast will show for 3 seconds
+            });
             if (onBookAdded) onBookAdded();
             onClose(); // Close modal on success
         } catch (error) {
             console.error('Failed to add book:', error);
-            alert('Something went wrong while adding the book.');
+            toast.error('Something went wrong while adding the book.', {
+                position: 'bottom-right',
+                duration: 3000,
+            });
         }
     };
 

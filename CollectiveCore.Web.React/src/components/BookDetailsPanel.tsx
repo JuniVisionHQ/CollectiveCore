@@ -49,8 +49,7 @@ export default function BookDetailsPanel({ book, userBook, onAddToCollection, on
             <button
               type="button"
               className="text-red-600 text-sm mx-2 font-medium hover:text-blue-800 cursor-pointer"
-              onClick={() => onRemoveFromCollection(book.id)}   
-              // To Do: add Remove from Collection logic           
+              onClick={() => onRemoveFromCollection(book.id)}           
             > ( x remove )
             </button>   
             

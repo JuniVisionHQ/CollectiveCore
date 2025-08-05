@@ -13,6 +13,7 @@ import type { User } from '../types/user';
 import type { UserBook } from "../types/userBook";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup, } from "@/shadcn/components/ui/resizable"
+import { toast } from 'react-hot-toast';
 
 type OutletContextType = {
   currentUser: User | null;
@@ -29,7 +30,7 @@ export default function BookListPage() {
 
   const { isAuthenticated, isLoading: authLoading, getAccessTokenSilently } = useAuth0();
 
-   // Fetch all books (public)
+  // Fetch all books (public)
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -72,7 +73,7 @@ export default function BookListPage() {
     if (!authLoading) fetchUserBooks();
   }, [isAuthenticated, authLoading, getAccessTokenSilently, refreshKey]); // also refresh userBooks
 
-   // Add book to current user's collection
+  // Add book to current user's collection
   const handleAddToCollection = async (bookId: number) => {
     if (!isAuthenticated) return;
 
@@ -80,10 +81,19 @@ export default function BookListPage() {
       const token = await getAccessTokenSilently();
       await addBookToUser(token, bookId);
 
+      toast.success('Book added to collection!', {
+        position: 'bottom-right', // You can also use 'top-left', 'bottom-right', etc.
+        duration: 3000,
+      });
+
       // Just update userBooks – avoids full refresh
       const updatedBooks = await getCurrentUserBooks(token);
       setUserBooks(updatedBooks);
     } catch (err) {
+      toast.error('Failed to add book to your collection.', {
+        position: 'bottom-right',
+        duration: 3000,
+      });
       console.error("Error adding book to collection:", err);
     }
   };
@@ -96,16 +106,25 @@ export default function BookListPage() {
       const token = await getAccessTokenSilently();
       await removeBookFromUser(token, bookId);
 
+      toast.success('Book removed from collection!', {
+        position: 'bottom-right',
+        duration: 3000,
+      });
+
       // Refresh userBooks and allBooks after removing
       const updatedBooks = await getCurrentUserBooks(token);
       setUserBooks(updatedBooks);
     } catch (err) {
+      toast.error('Failed to remove book from your collection.', {
+        position: 'bottom-right',
+        duration: 3000,
+      });
       console.error("Error adding book to collection:", err);
     }
   };
 
   if (loading) return <p>Loading books...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;  
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     <div className="myapp-bookpage-container h-[80vh] flex flex-col flex-1 min-h-0">
@@ -121,7 +140,7 @@ export default function BookListPage() {
         </ResizablePanel>
 
         <ResizableHandle withHandle className="resizeable-withHandle-color" />
-        
+
         <ResizablePanel defaultSize={60} className="flex flex-col min-h-0">
           <BookDetailsPanel
             book={selectedBook}
